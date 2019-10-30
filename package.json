@@ -1,0 +1,26 @@
+{
+  "name": "learnApiPostgres",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "nyc --reporter=html --reporter=text mocha --timeout 10000 --exit",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "cors": "^2.8.5",
+    "coveralls": "^3.0.7",
+    "express": "^4.17.1",
+    "mocha": "^6.2.2",
+    "pg": "^7.12.1"
+  },
+  "devDependencies": {
+    "nyc": "^14.1.1"
+  }
+}
