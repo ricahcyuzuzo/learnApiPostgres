@@ -1,3 +1,13 @@
+require('dotenv').config();
+const { Pool } = require('pg');
+const connectionString = 'postgresql://ricah:kigali@localhost:5432/books';
+
+const pool = new Pool ({
+    connectionString: connectionString
+})
+
+pool.connect();
+
 const app = require('../app');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
@@ -9,6 +19,29 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 describe('Testing the whole application', () => {
+
+    before(() => {
+        pool.query('CREATE TABLE testcases (id SERIAL PRIMARY KEY, author VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL)', (error) => {
+            if (error) {
+                throw error;
+            }
+        });
+
+        pool.query('INSERT INTO testcases (author, title) VALUES ("Test","Test")', (error) => {
+            if (error) {
+                throw error;
+            }
+        });
+    });
+
+    after(() => {
+        pool.query('DROP TABLE testcases', (error) => {
+            if (error) {
+                throw error;
+            }
+        });
+    })
+
     describe('Testing all GET methods', () => {
         it('Should Welcome the User to the API', (done) => {
             chai.request(app)
@@ -32,7 +65,7 @@ describe('Testing the whole application', () => {
         it('Should get one book', (done) => {
 
             chai.request(app)
-                .get('/api/books/15')
+                .get('/api/books/1')
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('array');
@@ -88,7 +121,7 @@ describe('Testing the whole application', () => {
 
         it('Should update a book', (done) => {
             chai.request(app)
-                .put('/api/books/15')
+                .put('/api/books/1')
                 .send(book)
                 .end((err, res) => {
                     res.should.have.status(202);
@@ -125,7 +158,7 @@ describe('Testing the whole application', () => {
 
         it('Should delete a book', (done) => {
             chai.request(app)
-                .delete('/api/books/15')
+                .delete('/api/books/1')
                 .end((err, res) => {
                     res.should.have.status(203);
                     res.body.should.be.a('object');
