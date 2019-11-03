@@ -16,10 +16,6 @@ app.get('/api', (req, res) => {
 // Get all the books
 app.get('/api/books', (req, res) => {
     pool.query('SELECT * FROM books', (error, results) => {
-        if (error) {
-            throw error;
-        }
-
         res.status(200).send(results.rows);
     })
 });
@@ -28,9 +24,7 @@ app.get('/api/books', (req, res) => {
 app.get('/api/books/:id', (req, res) => {
     const id = req.params.id;
     pool.query('SELECT * FROM books WHERE ID = $1', [id], (error, results) => {
-        if (error) {
-            throw error;
-        }else if (!results.rows[0]) {
+        if (!results.rows[0]) {
             return res.status(404).send({message: 'Book not found!!'})
         }
         
@@ -42,9 +36,6 @@ app.get('/api/books/:id', (req, res) => {
 app.post('/api/books', (req, res) => {
     const { author, title } = req.body;
     pool.query('INSERT INTO books (author, title) VALUES ($1, $2)',[author, title], (error) => {
-        if (error) {
-            throw error
-        }
         res.status(201).send({
             status: 'success', 
             message: 'Book added!!'
@@ -63,9 +54,6 @@ app.put('/api/books/:id', async (req, res) => {
             return res.status(404).send({message: "Book not found!!"})
         }
         pool.query('UPDATE books SET author = $2 ,title = $3 WHERE id = $1', [id, author, title], (error) => {
-            if (error) {
-                throw error;
-            }
             res.status(202).send({
                 status: 'success',
                 message: 'Book Updated!!'
@@ -88,10 +76,7 @@ app.delete('/api/books/:id', async (req, res) => {
             return res.status(404).send({ message: "Book not found!!" })
         }
 
-        pool.query('DELETE FROM books WHERE ID = $1', [id], (error) => {
-            if (error) {
-                throw error;
-            }         
+        pool.query('DELETE FROM books WHERE ID = $1', [id], (error) => {        
             res.status(203).send({
                 status: 'success',
                 message: 'Book Deleted!!'

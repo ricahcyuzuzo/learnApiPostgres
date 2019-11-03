@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=html --reporter=text mocha --timeout 10000 --exit",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "start": "npm run createTables",
+    "test": "npm run deleteTables && npm run createTables && nyc --reporter=html --reporter=text mocha --timeout=10000 --exit",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "createTables": "node model.createTable.js",
+    "deleteTables": "node model.deleteTable.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +19,7 @@
     "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "coveralls": "^3.0.7",
+    "cross-env": "^6.0.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mocha": "^6.2.2",
