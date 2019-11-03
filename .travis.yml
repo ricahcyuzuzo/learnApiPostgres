@@ -6,7 +6,7 @@ install: npm install
 
 services: postgresql 
  
-before_script: psql -c 'create database testing;' -U ricah -p kigali
+before_script: psql -c 'create database books;' -U ricah
 
 script: npm test
 
